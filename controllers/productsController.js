@@ -24,8 +24,10 @@ routes.post('/create',validateProduct, (req, res) => {
 })
 
 routes.get('/details/:productId', (req, res) => {
-    let product = null;
-    res.render('details', {product})
+    productService.getById(req.params.productId)
+    .then((cube)=>res.render('details', {title: 'Details', cube})
+    .catch(()=> res.status(500).end()));
+    
 })
 
 module.exports = routes;

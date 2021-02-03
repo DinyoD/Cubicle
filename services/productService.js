@@ -6,11 +6,16 @@ function create(data){
 }
 
 async function getAll(){
-    let products = await Cube.find({}).lean();
-    return products;
+    return await Cube.find({}).lean();
+    
+}
+
+async function getById(id){
+    return await Cube.findById(id).lean();
 }
 
 module.exports = {
     create,
     getAll,
+    getById
 }
