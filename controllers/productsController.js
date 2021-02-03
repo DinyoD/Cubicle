@@ -3,11 +3,11 @@ const { Router } = require('express');
 const routes = Router();
 
 routes.get('/', (req, res) => {
-    res.render('home');
+    res.render('home', {title: 'Home'});
 })
 
 routes.get('/create', (req, res) => {
-    res.render('create');
+    res.render('create', {title: 'Create'});
 })
 
 routes.get('/details/:productId', (req, res) => {

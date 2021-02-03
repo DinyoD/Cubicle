@@ -8,7 +8,7 @@ const productsController = require('./controllers/productsController');
 router.use('/', homeController);
 routes.use('/products', productsController);
 routes.get('*', (req, res) => {
-    res.render('404')
+    res.render('404', {title: 'Page not found'})
 })
 
 module.exports = router;
