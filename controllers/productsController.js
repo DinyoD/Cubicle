@@ -5,7 +5,8 @@ const { validateProduct } = require('./helpers/productHelpers');
 const routes = Router();
 
 routes.get('/', (req, res) => {
-    productService.getAll()
+    console.log(req.query);
+    productService.getAll(req.query)
         .then((products) => {
             res.render('home', {title: 'Home', products});
         })
