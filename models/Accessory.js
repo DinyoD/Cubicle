@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 let accessorySchema = new mongoose.Schema({
-    _id: {
+    id: {
         type: mongoose.Types.ObjectId,
     },
     name: {
@@ -23,3 +23,5 @@ let accessorySchema = new mongoose.Schema({
         ref: 'Cube'
     }]
 })
+
+module.exports = mongoose.model('Accessory', accessorySchema)

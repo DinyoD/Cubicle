@@ -1,11 +1,11 @@
 const { Router } = require('express');
 const productService = require('../services/productService');
+const accessoryService = require('../services/accessoryService');
 const { validateProduct } = require('./helpers/productHelpers');
 
-const routes = Router();
+const router = Router();
 
-routes.get('/', (req, res) => {
-    console.log(req.query);
+router.get('/', (req, res) => {
     productService.getAll(req.query)
         .then((products) => {
             res.render('home', {title: 'Home', products});
@@ -13,22 +13,36 @@ routes.get('/', (req, res) => {
         .catch(()=>res.status(500).end());
 })  
 
-routes.get('/create', (req, res) => {
-    res.render('create', {title: 'Create'});
+router.get('/create', (req, res) => {
+    res.render('create', {title: 'Cube Create'});
 })
 
-routes.post('/create',validateProduct, (req, res) => {
+router.post('/create',validateProduct, (req, res) => {
     let data = req.body;
     productService.create(data)
         .then(res.redirect('/products'))
         .catch(()=>res.status(500).end());
 })
 
-routes.get('/details/:productId', (req, res) => {
+router.get('/details/:productId', (req, res) => {
     productService.getById(req.params.productId)
-    .then((cube)=>res.render('details', {title: 'Details', cube})
-    .catch(()=> res.status(500).end()));
+    .then((cube)=> {
+        res.render('details', {title: 'Cube Details', cube})
+    })
+    .catch(()=> res.status(500).end());
     
 })
 
-module.exports = routes;
+router.get('/:productId/attach', async (req, res) => {
+    let cube = await productService.getById(req.params.productId)
+    let accessories = await accessoryService.getAllUnattached(cube.accessories);
+
+    res.render('attachAccessory', {cube, accessories})
+})
+
+router.post('/:productId/attach', async (req, res) => {
+    productService.AttachAccesssory(req.params.productId, req.body.accessory)
+        .then(()=> res.redirect(`/products/details/${req.params.productId}`))
+})
+
+module.exports = router;
