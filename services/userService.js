@@ -1,14 +1,14 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const {SALT_ROUNDS} = require('../config/config');
+const {SALT_ROUNDS, SECRET} = require('../config/config');
 
 
 const register = async({username, password}) => {
     let userWithSameName = await User.findOne({username: username}).lean();
     
     if (userWithSameName) {
-        throw new Error('this username already exist!');
+        throw {message: 'This username already exist!'};
     }
 
     let salt = await bcrypt.genSalt(SALT_ROUNDS);
@@ -19,7 +19,23 @@ const register = async({username, password}) => {
     return await user.save();
 }
 
+const login = async({username, password}) => {
+    let user = await User.findOne({username: username}).lean();
+    if (!user) {
+        throw {message: 'User not found!'}
+    }
+
+    let corectPassword = await bcrypt.compare(password, user.password);
+    if (!corectPassword) {
+        throw {message: 'Wrong password!'};
+    }
+    let token = jwt.sign({_id: user._id, roles: ['admin']}, SECRET);
+    
+    return token;
+}
+
 
 module.exports = {
     register,
+    login,
 };

@@ -1,7 +1,9 @@
 const { Router } = require('express');
 const routes = Router();
+const { COOKIE_NAME } = require('../config/config');
 
 const userService = require('../services/userService');
+const router = require('./productsController');
 
 routes.get('/register', (req, res) => {
     res.render('register');
@@ -30,10 +32,21 @@ routes.get('/login', (req, res) => {
     res.render('login');
 })
 
-routes.post('/login', (req, res) => {
+routes.post('/login', async (req, res) => {
     const {username, password} = req.body;
 
+    try {
+        let token = await userService.login({username, password});
+        res.cookie(COOKIE_NAME, token)
+        res.redirect('/products')
+    } catch (error) {
+        res.render('login', {error})
+    }
+})
 
+routes.get('/logout', (req, res) => {
+    res.clearCookie(COOKIE_NAME);
+    res.redirect('/products');
 })
 
 

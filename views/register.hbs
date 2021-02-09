@@ -2,6 +2,9 @@
 	    <h1>Register Form</h1>
       <div class="form">
           <form method="POST">
+              {{#if error}}
+                <span class="error">{{error.message}}</span>
+              {{/if}}
               <label for="username">Username</label>
               <input type="text" id="username" name="username">
 
