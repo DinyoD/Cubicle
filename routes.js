@@ -5,12 +5,12 @@ const router = Router();
 const homeController = require('./controllers/homeController');
 const productsController = require('./controllers/productsController');
 const accessoriesController = require('./controllers/accessoriesController');
-const authController = require('./controllers/authController');
+const userController = require('./controllers/userController');
 
 router.use('/', homeController);
 routes.use('/products', productsController);
 routes.use('/accessories', accessoriesController)
-routes.use('/auth', authController)
+routes.use('/user', userController)
 routes.get('*', (req, res) => {
     res.render('404', {title: 'Page not found'})
 })
