@@ -37,7 +37,9 @@ routes.post('/login', async (req, res) => {
 
     try {
         let token = await userService.login({username, password});
-        res.cookie(COOKIE_NAME, token)
+        res.cookie(COOKIE_NAME, token, {
+            httpOnly: true,
+        })
         res.redirect('/products')
     } catch (error) {
         res.render('login', {error})
