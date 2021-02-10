@@ -1,8 +1,8 @@
 const Accessory = require('../models/Accessory');
 const Cube = require('../models/Cube');
 
-function create(data){
-    let cube = new Cube(data)
+function create(data, creatorId){
+    let cube = new Cube({...data, creator: creatorId})
     return cube.save();
 }
 
@@ -31,9 +31,19 @@ async function AttachAccesssory(cubeId, accessoryId){
     return cube.save();
 }
 
+
+function updateOne(cubeId, data){
+    return Cube.updateOne({_id: cubeId}, data)
+}
+
+function deleteOne(cubeId){
+    return Cube.deleteOne({_id: cubeId});
+} 
 module.exports = {
     create,
     getAll,
     getById,
     AttachAccesssory,
+    updateOne,
+    deleteOne,
 }

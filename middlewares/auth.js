@@ -10,7 +10,7 @@ module.exports = function(){
                 res.clearCookie(COOKIE_NAME);
                 
             } else {
-                res.user = decodedToken;
+                req.user = decodedToken;
                 res.locals.user = decodedToken;
                 res.locals.isAuthenticated  = true;
                 // req.locals.user = req.user;
