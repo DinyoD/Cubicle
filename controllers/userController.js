@@ -1,15 +1,16 @@
 const { Router } = require('express');
 const routes = Router();
 const { COOKIE_NAME } = require('../config/config');
-
+const isGuest = require('../middlewares/isGuest');
+const isAuthenticated =  require('../middlewares/isAuthenticated');
 const userService = require('../services/userService');
-const router = require('./productsController');
 
-routes.get('/register', (req, res) => {
+
+routes.get('/register', isGuest,  (req, res) => {
     res.render('register');
 })
 
-routes.post('/register', async (req, res) => {
+routes.post('/register', isGuest, async (req, res) => {
     
     const {username, password, repeatPassword} = req.body;
 
@@ -28,11 +29,11 @@ routes.post('/register', async (req, res) => {
     }
 })
 
-routes.get('/login', (req, res) => {
+routes.get('/login', isGuest, (req, res) => {
     res.render('login');
 })
 
-routes.post('/login', async (req, res) => {
+routes.post('/login', isGuest, async (req, res) => {
     const {username, password} = req.body;
 
     try {
@@ -46,7 +47,7 @@ routes.post('/login', async (req, res) => {
     }
 })
 
-routes.get('/logout', (req, res) => {
+routes.get('/logout', isAuthenticated, (req, res) => {
     res.clearCookie(COOKIE_NAME);
     res.redirect('/products');
 })
